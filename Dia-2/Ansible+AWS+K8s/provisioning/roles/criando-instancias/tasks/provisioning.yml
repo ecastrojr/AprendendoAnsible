@@ -1,32 +1,31 @@
----
 - name: Criando o Security Group
   local_action:
     module: ec2_group
     name: "{{ sec_group_name }}"
     description: sg projeto
     profile: "{{ profile }}"
-    region: {{ region }}
+    region: "{{ region }}"
     rules:
     - proto: tcp
       from_port: 22
       to_port: 22
       cidr_ip: 0.0.0.0/0
       rule_desc: SSH
-     rules_egress:
-     - proto: all
-       cidr_ip: 0.0.0.0/0
+    rules_egress:
+    - proto: all
+      cidr_ip: 0.0.0.0/0
   register: basic_firewall
 
 - name: Criando a instancia EC2
   local_action: ec2
-    group: {{ sec_group_name }}
-    instance_type: {{ instance_type }}
-    image: {{ image  }}
-    profile: {{ profile }}
-    wait: true
-    region: {{ region }}
-    keypair: {{ keypair }}
-    count: {{ count }}
+    group={{ sec_group_name }}
+    instance_type={{ instance_type }}
+    image={{ image  }}
+    profile={{ profile }}
+    wait=true
+    region={{ region }}
+    keypair={{ keypair }}
+    count={{ count }}
   register: ec2
 
 - name: Adicionando a instancia ao inventario temp
@@ -44,7 +43,7 @@
   local_action: lineinfile
     dest="./hosts"
     regexp={{ item.private_ip }}
-    insertafter="[kubernetes]" line={{ item.privado_ip }}
+    insertafter="[kubernetes]" line={{ item.private_ip }}
   with_items: "{{ ec2.instances }}"
 
 - name: Esperando o SSH
