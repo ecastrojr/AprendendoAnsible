@@ -1,6 +1,34 @@
 - name: Instalando o Docker
   shell: curl -fsSL https://get.docker.com | bash
 
+- name: Configurando o Docker Daemon para usar o systemd
+  copy:
+    dest: "/etc/docker/daemon.json"
+    content:
+      '{
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "log-driver": "json-file",
+        "log-opts": {
+          "max-size": "100m"
+        },
+        "storage-driver": "overlay2"
+      }'
+
+- name: Habilitando o start do Docker no boot
+  service:
+    name: docker
+    enabled: yes
+
+- name: Executando um Daemon Reload
+  systemd:
+    daemon_reload: yes
+
+- name: Restartando o Docker
+  service:
+    name: docker
+    state: restarted  
+
+
 - name: Adicionando as chaves do repo apt do k8s
   apt_key:
     url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
