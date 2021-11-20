@@ -37,10 +37,10 @@
     token: "{{ k8s_token.stdout }}"
     hash: "{{ k8s_master_ca_hash.stdout }}"
 
-- name:
+- name: Token
   debug:
     msg: "[MASTER] K8S_TOKEN_HOLDER - O token eh: {{ hostvars['K8S_TOKEN_HOLDER']['token'] }}"
 
-- name:
+- name: Hash
   debug:
     msg: "[MASTER] K8S_TOKEN_HOLDER - O hash eh: {{ hostvars['K8S_TOKEN_HOLDER']['hash'] }}"
