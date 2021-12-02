@@ -6,7 +6,7 @@ metadata:
     run: nginx
     track: stable
   name: giropops
-  namespaces: default
+  namespace: default
 spec:
   externalTrafficPolicy: Cluster
   ports:
@@ -23,4 +23,4 @@ spec:
   selector:
     app: giropops
   sessionAffinity: None
-  type: N odePort
+  type: NodePort
